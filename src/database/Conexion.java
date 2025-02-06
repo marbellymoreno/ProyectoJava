@@ -19,7 +19,7 @@ public class Conexion {
     Connection conectar;
     public static Conexion singleConnection;
     
-    private Conexion() {
+    public Conexion() {
         this.conectar = null;
     }
     
@@ -41,5 +41,17 @@ public class Conexion {
             singleConnection = new Conexion();
         }
         return singleConnection;
+    }
+    
+    public void desconectar()
+    {
+        try 
+        {
+            this.conectar.close();
+        }
+        catch (SQLException e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }
 }
