@@ -59,7 +59,7 @@ public class CategoriaDAO implements CRUDGeneralInterface<Categoria> {
     public boolean update(Categoria object) {
         resp = false;
         try {
-            ps = conectar.getConnection().prepareStatement("UPDATE categoria SET nombre=?, descripcion=? WHERE id=?");
+            ps = conectar.getConnection().prepareStatement("UPDATE categoria SET nombre=?, descripcion=?, estado=? WHERE id=?");
             ps.setString(1, object.getNombre());
             ps.setString(2, object.getDescripcion());
             ps.setInt(3, object.getID());
@@ -72,19 +72,32 @@ public class CategoriaDAO implements CRUDGeneralInterface<Categoria> {
         return resp;
     }
 
-    @Override
+@Override
     public boolean onVariable(int id) {
-        resp = false;
         try {
-            ps = conectar.getConnection().prepareStatement("UPDATE categoria SET estado=1 WHERE id=?");
-            ps.setInt(1, id);
-            resp = ps.executeUpdate() > 0;
+            ps = conectar.getConnection().prepareStatement(
+                    "UPDATE categoria SET estado=1 WHERE id= ?"
+            );
+            ps.setInt(1, id);  // Establece el ID en el parámetro de la consulta
+
+            // Ejecuta la actualización y verifica si se modificaron filas
+            if (ps.executeUpdate() > 0) {
+                resp = true;  // Si la actualización fue exitosa, cambia el estado de la variable
+            }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
+            JOptionPane.showMessageDialog(null, e.getMessage());  // Muestra el error en caso de fallo
         } finally {
-            closeResources();
+            try {
+                if (ps != null) {
+                    ps.close();  // Asegúrate de cerrar el PreparedStatement después de su uso
+                }
+            } catch (SQLException e) {
+                // Manejo de errores al cerrar el PreparedStatement (opcional)
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+            conectar.desconectar();  // Desconecta la base de datos
         }
-        return resp;
+        return resp;  // Retorna el resultado de la operación
     }
 
     @Override
