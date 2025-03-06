@@ -5,6 +5,7 @@
 package presentacion;
 
 import javax.swing.JOptionPane;
+import javax.swing.table.TableRowSorter;
 import negocios.CategoriaControl;
 /**
  *
@@ -29,12 +30,14 @@ public class FormCategoria extends javax.swing.JInternalFrame {
     }
     
     private void listar (String texto) {
-        tablaListado. setModel (this.CONTROL.listar (texto));
-        lblCantidadRegistro.setText ("Mostrar " +
-                this.CONTROL.totalMostrados () +
+        tablaListado.setModel(this.CONTROL.listar(texto));
+        TableRowSorter orden = new TableRowSorter(tablaListado.getModel());
+        tablaListado.setRowSorter(orden);
+        lblCantidadRegistro.setText("Mostrar " + 
+                this.CONTROL.totalMostrados() +
                 " de un total de " +
-                this.CONTROL.total ()
-                );
+                this.CONTROL.total()
+        );
     }
     
     private void limpiar(){
