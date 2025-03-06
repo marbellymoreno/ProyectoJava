@@ -1,15 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package datosDAO;
+
 import datos.interfaces.CRUDGeneralInterface;
 import entidades.Categoria;
-import java.util.List;
 import database.Conexion;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
@@ -26,22 +23,18 @@ public class CategoriaDAO implements CRUDGeneralInterface<Categoria> {
 
     @Override
     public List<Categoria> getAll(String list) {
-        List<Categoria> registros = new ArrayList();
+        List<Categoria> registros = new ArrayList<>();
         try {
-            ps = conectar.conectar().prepareStatement("SELECT * FROM categoria WHERE nombre like ?");
+            ps = conectar.getConnection().prepareStatement("SELECT * FROM categoria WHERE nombre LIKE ?");
             ps.setString(1, "%" + list + "%");
             rs = ps.executeQuery();
             while (rs.next()) {
                 registros.add(new Categoria(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getBoolean(4)));
             }
-            ps.close();
-            rs.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         } finally {
-            ps = null;
-            rs = null;
-            conectar.desconectar();
+            closeResources();
         }
         return registros;
     }
@@ -50,18 +43,14 @@ public class CategoriaDAO implements CRUDGeneralInterface<Categoria> {
     public boolean insert(Categoria object) {
         resp = false;
         try {
-            ps = conectar.conectar().prepareStatement("INSERT INTO categoria(?,?,1)");
+            ps = conectar.getConnection().prepareStatement("INSERT INTO categoria (nombre, descripcion, estado) VALUES (?, ?, 1)");
             ps.setString(1, object.getNombre());
             ps.setString(2, object.getDescripcion());
-            if(ps.executeUpdate() > 0){
-                resp = true;
-                ps.close();
-            }
+            resp = ps.executeUpdate() > 0;
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
-        }finally{
-            ps = null;
-            conectar.desconectar();
+        } finally {
+            closeResources();
         }
         return resp;
     }
@@ -70,40 +59,30 @@ public class CategoriaDAO implements CRUDGeneralInterface<Categoria> {
     public boolean update(Categoria object) {
         resp = false;
         try {
-            ps = conectar.conectar().prepareStatement
-        ("Update categoria SET nombre=?, descripcion =? where id= ?");
+            ps = conectar.getConnection().prepareStatement("UPDATE categoria SET nombre=?, descripcion=? WHERE id=?");
             ps.setString(1, object.getNombre());
             ps.setString(2, object.getDescripcion());
             ps.setInt(3, object.getID());
-            if(ps.executeUpdate() > 0){
-                resp = true;
-                ps.close();
-            }
+            resp = ps.executeUpdate() > 0;
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
-        }finally{
-            ps = null;
-            conectar.desconectar();
+        } finally {
+            closeResources();
         }
         return resp;
     }
 
     @Override
     public boolean onVariable(int id) {
-          resp = false;
+        resp = false;
         try {
-            ps = conectar.conectar().prepareStatement
-        ("Update categoria SET estado=1, where id= ?");
+            ps = conectar.getConnection().prepareStatement("UPDATE categoria SET estado=1 WHERE id=?");
             ps.setInt(1, id);
-            if(ps.executeUpdate() > 0){
-                resp = true;
-                ps.close();
-            }
+            resp = ps.executeUpdate() > 0;
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
-        }finally{
-            ps = null;
-            conectar.desconectar();
+        } finally {
+            closeResources();
         }
         return resp;
     }
@@ -112,18 +91,13 @@ public class CategoriaDAO implements CRUDGeneralInterface<Categoria> {
     public boolean offVariable(int id) {
         resp = false;
         try {
-            ps = conectar.conectar().prepareStatement
-        ("Update categoria SET estado=0, where id= ?");
+            ps = conectar.getConnection().prepareStatement("UPDATE categoria SET estado=0 WHERE id=?");
             ps.setInt(1, id);
-            if(ps.executeUpdate() > 0){
-                resp = true;
-                ps.close();
-            }
+            resp = ps.executeUpdate() > 0;
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
-        }finally{
-            ps = null;
-            conectar.desconectar();
+        } finally {
+            closeResources();
         }
         return resp;
     }
@@ -132,24 +106,14 @@ public class CategoriaDAO implements CRUDGeneralInterface<Categoria> {
     public boolean exist(String text) {
         resp = false;
         try {
-            ps = conectar.conectar().prepareStatement
-        ("select nombre from categoria where id = ?");
-            ps.setString(1, text);
+            ps = conectar.getConnection().prepareStatement("SELECT nombre FROM categoria WHERE id = ?");
+            ps.setInt(1, Integer.parseInt(text));
             rs = ps.executeQuery();
-            rs.last();
-            
-            if(rs.getRow()> 0){
-                resp = true;
-            }
-            
-            ps.close();
-            rs.close();
-        } catch (SQLException e) {
+            resp = rs.next();
+        } catch (SQLException | NumberFormatException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
-        }finally{
-             ps = null;
-             rs = null;
-             conectar.desconectar();
+        } finally {
+            closeResources();
         }
         return resp;
     }
@@ -158,21 +122,25 @@ public class CategoriaDAO implements CRUDGeneralInterface<Categoria> {
     public int total() {
         int totalRegistro = 0;
         try {
-            ps = conectar.conectar().prepareStatement
-        ("select  count(id) from categoria");
+            ps = conectar.getConnection().prepareStatement("SELECT COUNT(id) AS total FROM categoria");
             rs = ps.executeQuery();
-            while(rs.next()){
-                totalRegistro = rs.getInt("count(id)");
+            if (rs.next()) {
+                totalRegistro = rs.getInt("total");
             }
-            ps.close();
-            rs.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
-        }finally{
-             ps = null;
-             rs = null;
-             conectar.desconectar();
+        } finally {
+            closeResources();
         }
         return totalRegistro;
+    }
+
+    private void closeResources() {
+        try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al cerrar recursos: " + e.getMessage());
+        }
     }
 }

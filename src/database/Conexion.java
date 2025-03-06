@@ -16,42 +16,40 @@ public class Conexion {
     private static final String DB_USERNAME = "root";
     private static final String DB_PASSWORD = "79079308";
    
-    Connection conectar;
-    public static Conexion singleConnection;
+    private static Conexion singleConnection;
+    private Connection conectar;
     
-    public Conexion() {
+    private Conexion() {
         this.conectar = null;
     }
     
-    public Connection conectar() {
-        try {
-            Class.forName(DB_DRIVER);
-            this.conectar = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-        } catch (ClassNotFoundException | SQLException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-            System.exit(0);
-        }
-        return this.conectar;
-    }
-    
-    public static Conexion getInstance()
-    {
-        if(singleConnection == null)
-        {
+    public static Conexion getInstance() {
+        if (singleConnection == null) {
             singleConnection = new Conexion();
         }
         return singleConnection;
     }
     
-    public void desconectar()
-    {
-        try 
-        {
-            this.conectar.close();
+    public Connection getConnection() {
+        if (conectar == null) {
+            try {
+                Class.forName(DB_DRIVER);
+                conectar = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            } catch (ClassNotFoundException | SQLException e) {
+                JOptionPane.showMessageDialog(null, "Error de conexión: " + e.getMessage());
+            }
         }
-        catch (SQLException e)
-        {
-            JOptionPane.showMessageDialog(null, e.getMessage());
+        return conectar;
+    }
+    
+    public void desconectar() {
+        if (conectar != null) {
+            try {
+                conectar.close();
+                conectar = null;  // Para indicar que la conexión está cerrada
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Error al cerrar conexión: " + e.getMessage());
+            }
         }
     }
 }
