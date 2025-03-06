@@ -8,6 +8,7 @@ import datosDAO.CategoriaDAO;
 import entidades.Categoria;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.html.parser.DTD;
 
@@ -17,6 +18,7 @@ public class CategoriaControl {
     private Categoria obj;
     private DefaultTableModel tModel;
     public int registrosMostrados;
+    
     public CategoriaControl() {
         this.DATOS = new CategoriaDAO();
         this.obj = new Categoria();
@@ -65,7 +67,12 @@ public class CategoriaControl {
 
     public String actualizar(int id, String nombre, String nombreAnterior, String descripcion) {
 
-        if (nombre.equals(nombreAnterior)) {
+        if (!nombre.equals(nombreAnterior)) {
+            // Primero verificamos si el nombre ya existe en la base de datos
+            if (DATOS.exist(nombre)) {
+                return "El objeto ya existe";
+            }
+            // Si no existe, actualizamos el objeto
             obj.setID(id);
             obj.setNombre(nombre);
             obj.setDescripcion(descripcion);
@@ -75,20 +82,16 @@ public class CategoriaControl {
                 return "Error al actualizar";
             }
         } else {
-            if (DATOS.exist(nombre)) {
-                return "El objeto ya existe";
+            // Si el nombre no ha cambiado, simplemente actualizamos la descripción
+            obj.setID(id);
+            obj.setNombre(nombre);
+            obj.setDescripcion(descripcion);
+            if (DATOS.update(obj)) {
+                return "OK";
             } else {
-                obj.setID(id);
-                obj.setNombre(nombre);
-                obj.setDescripcion(descripcion);
-                if (DATOS.exist(nombre)) {
-                    return "El registro ya existe";
-                } else {
-                    return "Error en la actualizacion";
-                }
+                return "Error en la actualización";
             }
         }
-
     }
 
     public String desactivar(int id) {
