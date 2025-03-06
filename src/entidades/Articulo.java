@@ -9,6 +9,7 @@ package entidades;
  * @author marbellymoreno
  */
 public class Articulo {
+
     private int idArticulo;
     private int categoriaId;
     private String codigo;
@@ -18,6 +19,20 @@ public class Articulo {
     private String descripcion;
     private String imagen;
     private boolean estado;
+
+    public Articulo() {
+    }
+
+    public Articulo(int idArticulo, int categoriaId, String codigo, String nombre, double precioventa, int stock, String descripcion, String imagen, boolean estado) {
+        this.idArticulo = idArticulo;
+        this.categoriaId = categoriaId;
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.precioVenta = precioventa;
+        this.stock = stock;
+        this.descripcion = descripcion;
+        this.estado = estado;
+    }
 
     public int getIdArticulo() {
         return idArticulo;
@@ -91,20 +106,8 @@ public class Articulo {
         this.estado = estado;
     }
 
-    public Articulo(int idArticulo, int categoriaId, String codigo, String nombre, double precioVenta, int stock, String descripcion, String imagen, boolean estado) {
-        this.idArticulo = idArticulo;
-        this.categoriaId = categoriaId;
-        this.codigo = codigo;
-        this.nombre = nombre;
-        this.precioVenta = precioVenta;
-        this.stock = stock;
-        this.descripcion = descripcion;
-        this.imagen = imagen;
-        this.estado = estado;
-    }
-
     @Override
     public String toString() {
-        return "Articulo{" + "idArticulo=" + idArticulo + ", categoriaId=" + categoriaId + ", codigo=" + codigo + ", nombre=" + nombre + ", precioVenta=" + precioVenta + ", stock=" + stock + ", descripcion=" + descripcion + ", imagen=" + imagen + ", estado=" + estado + '}';
+        return "Articulo{" + "idArticulo=" + idArticulo + ", categoriaId=" + categoriaId + ", codigo=" + codigo + ", nombre=" + nombre + ", precioventa=" + precioVenta + ", stock=" + stock + ", descripcion=" + descripcion + ", imagen=" + imagen + ", estado=" + estado + '}';
     }
 }
