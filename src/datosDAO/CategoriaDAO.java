@@ -59,7 +59,7 @@ public class CategoriaDAO implements CRUDGeneralInterface<Categoria> {
     public boolean update(Categoria object) {
         resp = false;
         try {
-            ps = conectar.getConnection().prepareStatement("UPDATE categoria SET nombre=?, descripcion=?, estado=? WHERE id=?");
+            ps = conectar.getConnection().prepareStatement("UPDATE categoria SET nombre=?, descripcion=?, estado=1 WHERE id=?");
             ps.setString(1, object.getNombre());
             ps.setString(2, object.getDescripcion());
             ps.setInt(3, object.getID());

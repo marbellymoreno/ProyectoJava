@@ -6,7 +6,7 @@ package presentacion;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.TableRowSorter;
-import negocios.CategoriaControl;
+import negocios.ArticuloControl;
 /**
  *
  * @author marbellymoreno
@@ -16,31 +16,31 @@ public class FormArticulo extends javax.swing.JInternalFrame {
     /**
      * Creates new form FormCategoria
      */
-    private final CategoriaControl CONTROL;
+    private final ArticuloControl CONTROL;
     private String accion;
     private String nombreAnt;
     
     public FormArticulo() {
         initComponents();
-        this.CONTROL = new CategoriaControl();
+        this.CONTROL = new ArticuloControl();
         this.listar("");
         tabGeneral.setEnabledAt(1, false);
         this.accion = "Guardar";
         txtId.setVisible(false);
     }
-    
-    private void listar (String texto) {
-        tablaListado.setModel(this.CONTROL.listar(texto));
+
+    private void listar(String texto) {
+        tablaListado.setModel(this.CONTROL.listar(texto,10,1));
         TableRowSorter orden = new TableRowSorter(tablaListado.getModel());
         tablaListado.setRowSorter(orden);
-        lblCantidadRegistro.setText("Mostrar " + 
-                this.CONTROL.totalMostrados() +
-                " de un total de " +
-                this.CONTROL.total()
+        lblCantidadRegistro.setText("Mostrar "
+                + this.CONTROL.totalMostrados()
+                + " de un total de "
+                + this.CONTROL.total()
         );
     }
-    
-    private void limpiar(){
+
+    private void limpiar() {
         txtNombre.setText("");
         txtDescripcion.setText("");
         this.accion = "Guardar";
@@ -291,7 +291,7 @@ public class FormArticulo extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        if (txtNombre.getText().length() == 0 || txtNombre.getText().length()>30){
+        /*if (txtNombre.getText().length() == 0 || txtNombre.getText().length()>30){
             JOptionPane.showMessageDialog(this, "Nombre 30 caracteres maxismo",
                     "Systema", JOptionPane.WARNING_MESSAGE);
             txtNombre.requestFocus();
@@ -333,7 +333,7 @@ public class FormArticulo extends javax.swing.JInternalFrame {
             } else {
                 this.mensajeError(respuesta);
             }
-        }
+        }*/
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
@@ -413,6 +413,13 @@ public class FormArticulo extends javax.swing.JInternalFrame {
 
     private void mensajeOk(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Sistema", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    private void ocultarColumna(){
+        tablaListado.getColumnModel().getColumn(1).setMaxWidth(0);
+        tablaListado.getColumnModel().getColumn(1).setMinWidth(0);
+        tablaListado.getTableHeader().getColumnModel().getColumn(1).setMaxWidth(0);
+        tablaListado.getTableHeader().getColumnModel().getColumn(1).setMinWidth(0);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
