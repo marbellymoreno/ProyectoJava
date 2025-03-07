@@ -156,4 +156,20 @@ public class CategoriaDAO implements CRUDGeneralInterface<Categoria> {
             JOptionPane.showMessageDialog(null, "Error al cerrar recursos: " + e.getMessage());
         }
     }
+    
+    public List<Categoria> SelectCategoria() {
+        List<Categoria> registros = new ArrayList<>();
+        try {
+            ps = conectar.getConnection().prepareStatement("SELECT id, nombre FROM categoria ORDER BY nombre ASC");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                registros.add(new Categoria(rs.getInt(1), rs.getString(2)));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        } finally {
+            closeResources();
+        }
+        return registros;
+    }
 }

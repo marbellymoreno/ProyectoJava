@@ -9,32 +9,34 @@ package entidades;
  * @author marbellymoreno
  */
 public class Articulo {
-
     private int idArticulo;
-    private int categoriaId;
+    private int categoria_id;
+    private  String categoriaNombre;
     private String codigo;
     private String nombre;
-    private double precioVenta;
-    private int stock;
-    private String descripcion;
-    private String imagen;
+    private double precio_venta;
+    private int stock ;
+    private String desscriocion; 
+    private String  imagen; 
     private boolean estado;
 
-    public Articulo() {
+     public Articulo() {
     }
 
-    public Articulo(int idArticulo, int categoriaId, String codigo, String nombre, double precioventa, int stock, String descripcion, String imagen, boolean estado) {
+    public Articulo(int idArticulo, int categoria_id, String categoriaNombre, String codigo, String nombre, double precio_venta, int stock, String desscriocion, String imagen, boolean estado) {
         this.idArticulo = idArticulo;
-        this.categoriaId = categoriaId;
+        this.categoria_id = categoria_id;
+        this.categoriaNombre = categoriaNombre;
         this.codigo = codigo;
         this.nombre = nombre;
-        this.precioVenta = precioventa;
+        this.precio_venta = precio_venta;
         this.stock = stock;
-        this.descripcion = descripcion;
+        this.desscriocion = desscriocion;
+        this.imagen = imagen;
         this.estado = estado;
     }
 
-    public int getIdArticulo() {
+     public int getIdArticulo() {
         return idArticulo;
     }
 
@@ -42,12 +44,12 @@ public class Articulo {
         this.idArticulo = idArticulo;
     }
 
-    public int getCategoriaId() {
-        return categoriaId;
+    public int getCategoria_id() {
+        return categoria_id;
     }
 
-    public void setCategoriaId(int categoriaId) {
-        this.categoriaId = categoriaId;
+    public void setCategoria_id(int categoria_id) {
+        this.categoria_id = categoria_id;
     }
 
     public String getCodigo() {
@@ -66,12 +68,12 @@ public class Articulo {
         this.nombre = nombre;
     }
 
-    public double getPrecioVenta() {
-        return precioVenta;
+    public double getPrecio_venta() {
+        return precio_venta;
     }
 
-    public void setPrecioVenta(double precioVenta) {
-        this.precioVenta = precioVenta;
+    public void setPrecio_venta(double precio_venta) {
+        this.precio_venta = precio_venta;
     }
 
     public int getStock() {
@@ -82,12 +84,12 @@ public class Articulo {
         this.stock = stock;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getDesscriocion() {
+        return desscriocion;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setDesscriocion(String desscriocion) {
+        this.desscriocion = desscriocion;
     }
 
     public String getImagen() {
@@ -106,8 +108,18 @@ public class Articulo {
         this.estado = estado;
     }
 
+   
+    public String getCategoriaNombre() {
+        return categoriaNombre;
+    }
+
+    public void setCategoriaNombre(String categoriaNombre) {
+        this.categoriaNombre = categoriaNombre;
+    }
+
     @Override
     public String toString() {
-        return "Articulo{" + "idArticulo=" + idArticulo + ", categoriaId=" + categoriaId + ", codigo=" + codigo + ", nombre=" + nombre + ", precioventa=" + precioVenta + ", stock=" + stock + ", descripcion=" + descripcion + ", imagen=" + imagen + ", estado=" + estado + '}';
+        return "Articulo{" + "idArticulo=" + idArticulo + ", categoria_id=" + categoria_id + ", categoriaNombre=" + categoriaNombre + ", codigo=" + codigo + ", nombre=" + nombre + ", precio_venta=" + precio_venta + ", stock=" + stock + ", desscriocion=" + desscriocion + ", imagen=" + imagen + ", estado=" + estado + '}';
     }
 }
+

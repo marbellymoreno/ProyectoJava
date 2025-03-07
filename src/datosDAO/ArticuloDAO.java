@@ -28,48 +28,56 @@ public class ArticuloDAO implements CrudPaginadoInterface<Articulo> {
 
     @Override
     public List<Articulo> getAll(String list, int totalPorPagina, int numPagina) {
-        List<Articulo> registros = new ArrayList<>();
+        List<Articulo> registros = new ArrayList();
         try {
             ps = conectar.getConnection().prepareStatement(
-                    "SELECT "
-                    + "a.idArticulo, "
-                    + "a.categoria_id, "
-                    + "c.nombre AS categoria_nombre, "
-                    + "a.codigo, "
-                    + "a.nombre, "
-                    + "a.precio_venta, "
-                    + "a.stock, "
-                    + "a.descripcion, "
-                    + "a.imagen, "
-                    + "a.estado "
-                    + " FROM articulo a "
-                    + " INNER JOIN categoria c ON a.categoria_id = c.id "
-                    + " WHERE a.nombre LIKE ? "
-                    + " ORDER BY a.idArticulo ASC "
-                    + " LIMIT ?, ?"
+             "SELECT "+
+              "a.idArticulo,"+
+              "a.categoria_id,"+
+              "c.nombre as categoria_nombre,"+ 
+              "a.codigo," +
+              "a.nombre,"+
+              "a.precio_venta,"+
+              "a.stock,"+
+              "a.descripcion,"+
+              "a.imagen,"+
+              "a.estado"+     
+             "FROM  articulo a" +
+             "inner join categoria c" +
+             "ON a.categoria_id = c.id"+
+             "Where a.nombre Like ?" +
+             "Order by a.idArticulo ASC" +
+             "Limit ?, ?"
+            
             );
+            
             ps.setString(1, "%" + list + "%");
-            ps.setInt(2, (numPagina - 1) * totalPorPagina);
-            ps.setInt(3, totalPorPagina);
-
+            ps.setInt(2, (numPagina-1) * totalPorPagina );
+             ps.setInt(2, totalPorPagina );
+             
             rs = ps.executeQuery();
             while (rs.next()) {
                 registros.add(new Articulo(
                         rs.getInt(1), // idArticulo
-                        rs.getInt(2), // categoria_id
-                        rs.getString(4), // codigo
-                        rs.getString(5), // nombre
-                        rs.getDouble(6), // precioVenta
-                        rs.getInt(7), // stock
-                        rs.getString(8), // descripcion
-                        rs.getString(9), // imagen
-                        rs.getBoolean(10) // estado
+                        rs.getInt(2), //categoria_id
+                        rs.getString(3),//nombre_categoria
+                         rs.getString(3), //Codigo
+                        rs.getString(4), //categoria nombre
+                       rs.getDouble(5), //precioVenta
+                        rs.getInt(6),   //stock
+                         rs.getString(7),// descipcion
+                        rs.getString(8),// imagen
+                        rs.getBoolean(9)//estado
                 ));
             }
+            ps.close();
+            rs.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         } finally {
-            cerrarRecursos();
+            ps = null;
+            rs = null;
+            conectar.desconectar();
         }
         return registros;
     }
@@ -81,12 +89,12 @@ public class ArticuloDAO implements CrudPaginadoInterface<Articulo> {
             ps = conectar.getConnection().prepareStatement("INSERT INTO articulo "
                     + "(categoria_id, codigo, nombre, precio_venta, stock, descripcion, imagen, estado) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, 1)");
-            ps.setInt(1, object.getCategoriaId());
+            ps.setInt(1, object.getCategoria_id());
             ps.setString(2, object.getCodigo());
             ps.setString(3, object.getNombre());
-            ps.setDouble(4, object.getPrecioVenta());
+            ps.setDouble(4, object.getPrecio_venta());
             ps.setInt(5, object.getStock());
-            ps.setString(6, object.getDescripcion());
+            ps.setString(6, object.getDesscriocion());
             ps.setString(7, object.getImagen());
 
             if (ps.executeUpdate() > 0) {
@@ -107,12 +115,12 @@ public class ArticuloDAO implements CrudPaginadoInterface<Articulo> {
             ps = conectar.getConnection().prepareStatement("UPDATE articulo SET "
                     + "categoria_id=?, codigo=?, nombre=?, precio_venta=?, stock=?, descripcion=?, imagen=? "
                     + "WHERE idArticulo=?");
-            ps.setInt(1, object.getCategoriaId());
+            ps.setInt(1, object.getCategoria_id());
             ps.setString(2, object.getCodigo());
             ps.setString(3, object.getNombre());
-            ps.setDouble(4, object.getPrecioVenta());
+            ps.setDouble(4, object.getPrecio_venta());
             ps.setInt(5, object.getStock());
-            ps.setString(6, object.getDescripcion());
+            ps.setString(6, object.getDesscriocion());
             ps.setString(7, object.getImagen());
             ps.setInt(8, object.getIdArticulo());
 

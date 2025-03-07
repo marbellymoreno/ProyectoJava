@@ -15,6 +15,11 @@ public class Categoria
     private String Descripcion;
     private boolean Activo;
 
+    public Categoria(int ID, String Nombre) {
+        this.ID = ID;
+        this.Nombre = Nombre;
+    }
+
     public Categoria() 
     {
     }
@@ -61,6 +66,6 @@ public class Categoria
 
     @Override
     public String toString() {
-        return "Categoria{" + "ID=" + ID + ", Nombre=" + Nombre + ", Descripcion=" + Descripcion + ", Activo=" + Activo + '}';
+        return   Nombre ;
     }
 }
